@@ -128,7 +128,7 @@ export default defineComponent({
   },
   setup() {
     const loading = ref(false);
-    const loadingMessage = ref('Lade Sprachmodelle ...');
+    const loadingMessage = ref('Loading language models...');
 
     onMounted(async () => {
       loading.value = true;

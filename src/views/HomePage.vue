@@ -159,9 +159,27 @@ export default defineComponent({
       this.translation = tempText;
     },
     async readAloud() {
-      await SpeechSynthesis.speak({
-        text: this.translation
-      });
+const speak = async () => {
+  // Add an utterance to the utterance queue to be spoken
+  const { utteranceId } = await SpeechSynthesis.speak({
+    language: this.targetLanguage,
+    pitch: 1.0,
+    queueStrategy: QueueStrategy.Add,
+    rate: 1.0,
+    text: this.translation,
+    voiceId: 'com.apple.ttsbundle.Samantha-compact',
+    volume: 1.0,
+  });
+  // Wait for the utterance to finish
+  await new Promise(resolve => {
+    void SpeechSynthesis.addListener('end', event => {
+      if (event.utteranceId === utteranceId) {
+        resolve(null);
+      }
+    });
+  });
+}; 
+  await speak();
     },
     async copyToClipboard() {
       await Clipboard.write({

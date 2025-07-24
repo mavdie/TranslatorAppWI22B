@@ -72,6 +72,12 @@
           message="Text copied to clipboard."
           :duration="2000">
         </ion-toast>
+
+        <ion-loading
+          v-if="loading"
+          :message="loadingMessage"
+          duration="0">
+        </ion-loading>
       </div>
     </ion-content>
   </ion-page>
@@ -92,12 +98,14 @@ import { IonContent,
   IonToast,
   IonSelect,
   IonSelectOption, 
+  IonLoading,
   IonTextarea} from '@ionic/vue';
 import { defineComponent } from "vue";
 import { swapHorizontal, volumeHigh, copy } from 'ionicons/icons';
 import { Translation, Language } from '@capacitor-mlkit/translation';
 import { Clipboard } from '@capacitor/clipboard';
 import { SpeechSynthesis, AudioSessionCategory, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
+import { onMounted, ref } from "vue";
 
 export default defineComponent({
   components: {
@@ -114,10 +122,36 @@ export default defineComponent({
     IonButton,
     IonSelect,
     IonSelectOption,
+    IonLoading,
     IonTextarea
   },
   setup() {
-    return {swapHorizontal, volumeHigh, copy};
+    const loading = ref(false);
+    const loadingMessage = ref('Lade Sprachmodelle ...');
+
+    onMounted(async () => {
+      loading.value = true;
+      const requiredLanguages = [
+        Language.German,
+        Language.English,
+        Language.French,
+        Language.Spanish,
+        Language.Italian,
+      ];
+      for (const lang of requiredLanguages) {
+        const { languages } = await Translation.getDownloadedModels();
+        if (!languages.includes(lang)) {
+          try {
+            await Translation.downloadModel({ language: lang });
+          } catch (e) {
+            console.error(`Failed to download model for ${lang}`, e);
+          }
+        }
+      }
+      loading.value = false;
+    });
+
+    return { swapHorizontal, volumeHigh, copy, loading, loadingMessage };
   },
   data() {
     return {
@@ -168,8 +202,9 @@ export default defineComponent({
       await Clipboard.write({
         string: this.translation
       });
-    },
-},
+    }
+  }
+})
 </script>
 
 <style scoped>
@@ -203,4 +238,4 @@ export default defineComponent({
 #container a {
   text-decoration: none;
 }
-</style> 
+</style>

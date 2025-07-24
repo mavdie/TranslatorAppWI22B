@@ -40,7 +40,6 @@
           <ion-textarea
             label="Source Text:"
             label-placement="stacked"
-            placeholder="Enter Text"
             auto-grow
             v-model="sourceText">
           </ion-textarea>
@@ -50,7 +49,6 @@
           <ion-textarea
             label="Translation:"
             label-placement="stacked"
-            placeholder="Translation"
             auto-grow
             readonly
             v-model="translation">

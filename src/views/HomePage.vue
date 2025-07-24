@@ -74,8 +74,9 @@
         </ion-toast>
 
         <ion-loading
-          v-if="loading"
+          :is-open="loading"
           :message="loadingMessage"
+          :backdrop-dismiss="false"
           duration="0">
         </ion-loading>
       </div>
@@ -97,7 +98,7 @@ import { IonContent,
   IonButton,
   IonToast,
   IonSelect,
-  IonSelectOption, 
+  IonSelectOption,
   IonLoading,
   IonTextarea} from '@ionic/vue';
 import { defineComponent } from "vue";

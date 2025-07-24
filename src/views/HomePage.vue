@@ -130,6 +130,7 @@ export default defineComponent({
 
     onMounted(async () => {
       loading.value = true;
+      await SpeechSynthesis.initialize();
       const requiredLanguages = [
         Language.German,
         Language.English,

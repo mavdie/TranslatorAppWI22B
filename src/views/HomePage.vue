@@ -139,14 +139,14 @@ export default defineComponent({
   },
   methods: {
     async translateText() {
-  this.disableButton = true
-  const { text } = await Translation.translate({
-    text: this.sourceText,
-    sourceLanguage: this.sourceLanguage,
-    targetLanguage: this.targetLanguage
-  })
-  this.translation = text
-  this.disableButton = false
+      this.disableButton = true
+      const { text } = await Translation.translate({
+        text: this.sourceText,
+        sourceLanguage: this.sourceLanguage,
+        targetLanguage: this.targetLanguage
+      });
+      this.translation = text
+      this.disableButton = false
     },
     async swapLanguages() {
       // Swap the selected languages
@@ -159,36 +159,17 @@ export default defineComponent({
       this.translation = tempText;
     },
     async readAloud() {
-const speak = async () => {
-  // Add an utterance to the utterance queue to be spoken
-  const { utteranceId } = await SpeechSynthesis.speak({
-    language: this.targetLanguage,
-    pitch: 1.0,
-    queueStrategy: QueueStrategy.Add,
-    rate: 1.0,
-    text: this.translation,
-    voiceId: 'com.apple.ttsbundle.Samantha-compact',
-    volume: 1.0,
-  });
-  // Wait for the utterance to finish
-  await new Promise(resolve => {
-    void SpeechSynthesis.addListener('end', event => {
-      if (event.utteranceId === utteranceId) {
-        resolve(null);
-      }
-    });
-  });
-}; 
-  await speak();
+      await SpeechSynthesis.speak({
+        text: this.translation,
+        language: 'en-US',
+      })
     },
     async copyToClipboard() {
       await Clipboard.write({
         string: this.translation
       });
-    }
-  },
-
-});
+    },
+},
 </script>
 
 <style scoped>

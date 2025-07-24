@@ -1,28 +1,96 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <ion-header>
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title>Translator</ion-title>
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
-
+    <ion-content>
       <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <ion-item>
+          <ion-select
+            label="Source Language"
+            v-model="sourceLanguage"
+            :options="languages"
+          ></ion-select>
+          <ion-textarea
+            label="Source Text:"
+            v-model="sourceText"
+          ></ion-textarea>
+        </ion-item>
+        <ion-button
+          @click="translateText()"
+          :disabled="disableButton"
+          >Translate</ion-button>
+        <ion-button>
+          <ion-icon
+            @click="swapLanguages()"
+            slot="icon-only"
+            :icon="swapVertical">
+          </ion-icon>
+        </ion-button>
+        <ion-select
+          label="Target Language"
+          v-model="targetLanguage"
+          :options="languages"
+        ></ion-select>
+        <ion-textarea
+            label="Translation:"
+            readonly
+            v-model="translation"
+          ></ion-textarea>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+<script lang="ts">
+import { IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonBackButton,
+  IonItem,
+  IonInput,
+  IonButton, } from '@ionic/vue';
+import { defineComponent } from "vue";
+import { swapVertical } from 'ionicons/icons';
+import { Translation, Language } from '@capacitor-mlkit/translation';
+import { Clipboard } from '@capacitor/clipboard';
+import { SpeechSynthesis, AudioSessionCategory, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
+
+export default defineComponent({
+  components: {
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonButtons,
+    IonBackButton,
+    IonItem,
+    IonInput,
+    IonButton,
+  },
+  data() {
+    return {
+      batteryLevel: undefined as number | undefined,
+      disableButton: false,
+    };
+  },
+  computed: {
+  },
+  methods: {
+    async translate() {
+    },
+    async swapLanguages() {
+    },
+  },
+
+});
 </script>
 
 <style scoped>

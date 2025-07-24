@@ -10,36 +10,47 @@
       <div id="container">
         <ion-item>
           <ion-select
-            label="Source Language"
-            v-model="sourceLanguage"
-            :options="languages"
-          ></ion-select>
+            label="Source Language:"
+            v-model="sourceLanguage">
+            <ion-select-option v-for="lang in languages" :key="lang.value" :value="lang.value">
+              {{ lang.label }}
+            </ion-select-option>
+          </ion-select>
+          <ion-button>
+          <ion-icon
+            @click="swapLanguages()"
+            slot="icon-only"
+            :icon="swapHorizontal">
+          </ion-icon>
+        </ion-button>
+          <ion-select
+            label="Target Language:"
+            v-model="targetLanguage">
+            <ion-select-option v-for="lang in languages" :key="lang.value" :value="lang.value">
+              {{ lang.label }}
+            </ion-select-option>
+        </ion-select>
+        </ion-item>
           <ion-textarea
             label="Source Text:"
             v-model="sourceText"
           ></ion-textarea>
-        </ion-item>
+          <ion-textarea
+            label="Translation:"
+            readonly
+            v-model="translation"
+          ></ion-textarea>
         <ion-button
           @click="translateText()"
           :disabled="disableButton"
           >Translate</ion-button>
         <ion-button>
           <ion-icon
-            @click="swapLanguages()"
+            @click="readAloud()"
             slot="icon-only"
-            :icon="swapVertical">
+            :icon="volumeHigh">
           </ion-icon>
         </ion-button>
-        <ion-select
-          label="Target Language"
-          v-model="targetLanguage"
-          :options="languages"
-        ></ion-select>
-        <ion-textarea
-            label="Translation:"
-            readonly
-            v-model="translation"
-          ></ion-textarea>
       </div>
     </ion-content>
   </ion-page>
@@ -57,7 +68,7 @@ import { IonContent,
   IonInput,
   IonButton, } from '@ionic/vue';
 import { defineComponent } from "vue";
-import { swapVertical } from 'ionicons/icons';
+import { swapHorizontal, volumeHigh } from 'ionicons/icons';
 import { Translation, Language } from '@capacitor-mlkit/translation';
 import { Clipboard } from '@capacitor/clipboard';
 import { SpeechSynthesis, AudioSessionCategory, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
@@ -73,21 +84,42 @@ export default defineComponent({
     IonBackButton,
     IonItem,
     IonInput,
-    IonButton,
+    IonButton
+  },
+  setup() {
+    return {swapHorizontal, volumeHigh};
   },
   data() {
     return {
-      batteryLevel: undefined as number | undefined,
       disableButton: false,
+      sourceLanguage: Language.German,
+      targetLanguage: Language.English,
+    languages: [
+      { label: 'Deutsch', value: Language.German },
+      { label: 'Englisch', value: Language.English },
+      { label: 'Französisch', value: Language.French },
+      { label: 'Spanisch', value: Language.Spanish },
+      { label: 'Italienisch', value: Language.Italian },
+    ],
+      sourceText: "Enter Text",
+      translation: "Translation"
     };
   },
   computed: {
   },
   methods: {
-    async translate() {
+    async translateText() {
+    const { text } = await Translation.translate({
+    text: this.sourceText,
+    sourceLanguage: this.sourceLanguage,
+    targetLanguage: this.targetLanguage,
+  });
+  this.translation = text;
     },
     async swapLanguages() {
     },
+    async readAloud() {
+    }
   },
 
 });

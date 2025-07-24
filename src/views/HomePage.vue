@@ -195,7 +195,7 @@ export default defineComponent({
     async readAloud() {
       await SpeechSynthesis.speak({
         text: this.translation,
-        language: 'en-US',
+        language: this.targetLanguage,
       })
     },
     async copyToClipboard() {

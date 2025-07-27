@@ -40,6 +40,7 @@
           <ion-textarea
             label="Source Text:"
             label-placement="stacked"
+            placeholder="Enter text"
             auto-grow
             v-model="sourceText">
           </ion-textarea>
@@ -49,6 +50,7 @@
           <ion-textarea
             label="Translation:"
             label-placement="stacked"
+            placeholder="Translation"
             auto-grow
             readonly
             v-model="translation">
@@ -165,8 +167,8 @@ export default defineComponent({
       { label: 'Spanisch', value: Language.Spanish },
       { label: 'Italienisch', value: Language.Italian },
     ],
-      sourceText: "Enter Text",
-      translation: "Translation"
+      sourceText: "",
+      translation: ""
     };
   },
   computed: {

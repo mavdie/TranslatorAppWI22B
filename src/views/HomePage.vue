@@ -91,10 +91,7 @@ import { IonContent,
   IonPage,
   IonTitle,
   IonToolbar,
-  IonButtons,
-  IonBackButton,
   IonItem,
-  IonInput,
   IonButton,
   IonToast,
   IonSelect,
@@ -105,7 +102,7 @@ import { defineComponent } from "vue";
 import { swapHorizontal, volumeHigh, copy } from 'ionicons/icons';
 import { Translation, Language } from '@capacitor-mlkit/translation';
 import { Clipboard } from '@capacitor/clipboard';
-import { SpeechSynthesis, AudioSessionCategory, QueueStrategy } from '@capawesome-team/capacitor-speech-synthesis';
+import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
 import { onMounted, ref } from "vue";
 
 export default defineComponent({
@@ -115,10 +112,7 @@ export default defineComponent({
     IonPage,
     IonTitle,
     IonToolbar,
-    IonButtons,
-    IonBackButton,
     IonItem,
-    IonInput,
     IonToast,
     IonButton,
     IonSelect,

@@ -103,6 +103,7 @@ import { swapHorizontal, volumeHigh, copy } from 'ionicons/icons';
 import { Translation, Language } from '@capacitor-mlkit/translation';
 import { Clipboard } from '@capacitor/clipboard';
 import { SpeechSynthesis } from '@capawesome-team/capacitor-speech-synthesis';
+import { Preferences } from '@capacitor/preferences';
 import { onMounted, ref } from "vue";
 
 export default defineComponent({
@@ -124,9 +125,26 @@ export default defineComponent({
     const loading = ref(false);
     const loadingMessage = ref('Loading language models...');
 
+    // Use refs for sourceLanguage and targetLanguage
+    const sourceLanguage = ref(Language.German);
+    const targetLanguage = ref(Language.English);
+
     onMounted(async () => {
       loading.value = true;
       await SpeechSynthesis.initialize();
+      
+      // Load saved languages from preferences
+      const { value: savedSourceLang } = await Preferences.get({ key: 'sourceLanguage' });
+      const { value: savedTargetLang } = await Preferences.get({ key: 'targetLanguage' });
+      
+      // Apply saved languages if they exist
+      if (savedSourceLang) {
+        sourceLanguage.value = savedSourceLang as Language;
+      }
+      if (savedTargetLang) {
+        targetLanguage.value = savedTargetLang as Language;
+      }
+
       const requiredLanguages = [
         Language.German,
         Language.English,
@@ -147,7 +165,7 @@ export default defineComponent({
       loading.value = false;
     });
 
-    return { swapHorizontal, volumeHigh, copy, loading, loadingMessage };
+    return { swapHorizontal, volumeHigh, copy, loading, loadingMessage, sourceLanguage, targetLanguage };
   },
   data() {
     return {
@@ -183,10 +201,24 @@ export default defineComponent({
       const temp = this.sourceLanguage;
       this.sourceLanguage = this.targetLanguage;
       this.targetLanguage = temp;
+      
+      // Save to preferences
+      await this.saveLanguagePreferences();
+      
       // Swap the text in the textareas as well
       const tempText = this.sourceText;
       this.sourceText = this.translation;
       this.translation = tempText;
+    },
+    async saveLanguagePreferences() {
+      await Preferences.set({
+        key: 'sourceLanguage',
+        value: this.sourceLanguage
+      });
+      await Preferences.set({
+        key: 'targetLanguage',
+        value: this.targetLanguage
+      });
     },
     async readAloud() {
       await SpeechSynthesis.speak({
@@ -198,6 +230,15 @@ export default defineComponent({
       await Clipboard.write({
         string: this.translation
       });
+    }
+  },
+  watch: {
+    // Save preferences when languages change
+    sourceLanguage() {
+      this.saveLanguagePreferences();
+    },
+    targetLanguage() {
+      this.saveLanguagePreferences();
     }
   }
 })

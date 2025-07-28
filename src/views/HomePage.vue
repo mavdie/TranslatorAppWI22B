@@ -234,4 +234,8 @@ export default defineComponent({
 #container a {
   text-decoration: none;
 }
+
+ion-title {
+  margin-top: 12px;
+}
 </style>

@@ -93,6 +93,7 @@ import { IonContent,
   IonToolbar,
   IonItem,
   IonButton,
+  IonBackButton,
   IonToast,
   IonSelect,
   IonSelectOption,
@@ -116,6 +117,7 @@ export default defineComponent({
     IonItem,
     IonToast,
     IonButton,
+    IonBackButton,
     IonSelect,
     IonSelectOption,
     IonLoading,
@@ -132,11 +134,11 @@ export default defineComponent({
     onMounted(async () => {
       loading.value = true;
       await SpeechSynthesis.initialize();
-      
+
       // Load saved languages from preferences
       const { value: savedSourceLang } = await Preferences.get({ key: 'sourceLanguage' });
       const { value: savedTargetLang } = await Preferences.get({ key: 'targetLanguage' });
-      
+
       // Apply saved languages if they exist
       if (savedSourceLang) {
         sourceLanguage.value = savedSourceLang as Language;
@@ -201,10 +203,10 @@ export default defineComponent({
       const temp = this.sourceLanguage;
       this.sourceLanguage = this.targetLanguage;
       this.targetLanguage = temp;
-      
+
       // Save to preferences
       await this.saveLanguagePreferences();
-      
+
       // Swap the text in the textareas as well
       const tempText = this.sourceText;
       this.sourceText = this.translation;

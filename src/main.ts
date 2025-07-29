@@ -42,6 +42,7 @@ const app = createApp(App)
 router.isReady().then(() => {
   app.mount('#app');
 
+  // Hardware back button functionality: navigate back or exit app
   CapacitorApp.addListener('backButton', ({ canGoBack }) => {
     if (canGoBack) {
       router.back();

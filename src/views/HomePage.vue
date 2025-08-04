@@ -58,7 +58,6 @@
         </ion-item>
 
         <div class="button-row">
-          <ion-button @click="translateText" :disabled="disableButton">Translate</ion-button>
           <ion-button @click="readAloud" fill="clear">
             <ion-icon slot="icon-only" :icon="volumeHigh"></ion-icon>
           </ion-button>
@@ -241,6 +240,10 @@ export default defineComponent({
     },
     targetLanguage() {
       this.saveLanguagePreferences();
+    },
+    sourceText: {
+      handler: 'translateText',
+      immediate: false,
     }
   }
 })

@@ -20,9 +20,11 @@
               {{ lang.label }}
             </ion-select-option>
           </ion-select>
+
           <ion-button @click="swapLanguages()" fill="clear">
             <ion-icon slot="icon-only" :icon="swapHorizontal"></ion-icon>
           </ion-button>
+
           <ion-select
             aria-label="Target Language:"
             interface="popover"
@@ -92,7 +94,6 @@ import { IonContent,
   IonToolbar,
   IonItem,
   IonButton,
-  IonBackButton,
   IonToast,
   IonSelect,
   IonSelectOption,
@@ -116,7 +117,6 @@ export default defineComponent({
     IonItem,
     IonToast,
     IonButton,
-    IonBackButton,
     IonSelect,
     IonSelectOption,
     IonLoading,
@@ -171,8 +171,6 @@ export default defineComponent({
   data() {
     return {
       disableButton: false,
-      sourceLanguage: Language.German,
-      targetLanguage: Language.English,
     languages: [
       { label: 'Deutsch', value: Language.German },
       { label: 'Englisch', value: Language.English },
@@ -183,8 +181,6 @@ export default defineComponent({
       sourceText: "",
       translation: ""
     };
-  },
-  computed: {
   },
   methods: {
     async translateText() {
@@ -271,9 +267,7 @@ export default defineComponent({
 #container p {
   font-size: 16px;
   line-height: 22px;
-
   color: #8c8c8c;
-
   margin: 0;
 }
 
